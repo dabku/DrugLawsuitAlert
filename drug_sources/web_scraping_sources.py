@@ -32,7 +32,11 @@ class Source:
             'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.117 Safari/537.36'}
         self.logger.debug("Downloading HTML file")
         r = requests.get(self.url, headers=headers).content
-
+        directory = os.path.split(self.test_file)[0]
+        try:
+            os.makedirs(directory)
+        except FileExistsError:
+            pass
         with open(self.test_file, 'bw') as html_file:
             self.logger.debug("Saving HTML file: {}".format(self.test_file))
             html_file.write(r)
