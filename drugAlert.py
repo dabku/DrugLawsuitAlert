@@ -106,13 +106,15 @@ def run(live, from_file):
     """
     error = None
     if not live:
-        test_run_db = 'test.db'
+
+        test_run_db = os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), 'test.db')
+        drugs_db = os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), 'drugs.db')
         try:
             os.remove(test_run_db)
         except FileNotFoundError:
             pass
         try:
-            copy2('drugs.db', test_run_db)
+            copy2(drugs_db, test_run_db)
         except FileNotFoundError:
             logger.error('Cannot find database file drugs.db')
             raise RuntimeError
@@ -120,8 +122,8 @@ def run(live, from_file):
         db.create_database()
     else:
         db = Drugs_DB()
-
-    twitter = LawsuitsTwitter('twitter_auth.json')
+    twitter_auth = os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), 'twitter_auth.json')
+    twitter = LawsuitsTwitter(twitter_auth)
     session = db.create_session()
     srcs = get_all_scraping_sources()
     scans = []

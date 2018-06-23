@@ -2,13 +2,16 @@ import logging
 from sqlalchemy import create_engine, and_, desc
 from sqlalchemy.orm import sessionmaker, scoped_session
 from sqlalchemy.orm.exc import NoResultFound
+from os import path
+import sys
 
 from database.db_models import DB_Drug, DB_Source, DB_Hit, Base
 
 
 class DB:
     def __init__(self, db_name="drugs.db"):
-        self.engine = create_engine('sqlite:///'+db_name, echo=False)
+        self.engine = create_engine('sqlite:///'+path.join(path.dirname(path.realpath(sys.argv[0])), db_name),
+                                    echo=False)
         self.session_factory = sessionmaker(bind=self.engine)
         self.logger = logging.getLogger('__main__')
         pass
