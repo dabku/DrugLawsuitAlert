@@ -1,5 +1,6 @@
 import unittest
-from .database import Drugs_DB,DB_Hit,DB_Drug,DB_Source
+from database.lawsuit_database import Drugs_DB,DB_Hit,DB_Drug,DB_Source
+
 
 class TestDatabase(unittest.TestCase):
     @classmethod

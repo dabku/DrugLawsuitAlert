@@ -2,8 +2,8 @@ import argparse
 import logging.handlers
 from shutil import copy2
 
-from database.database import DB_Hit
-from database.database import Drugs_DB
+from database.lawsuit_database import DB_Hit
+from database.lawsuit_database import Drugs_DB
 from drug_sources.web_scraping_sources import *
 from twitter.twitter import LawsuitsTwitter
 
