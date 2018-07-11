@@ -64,7 +64,10 @@ class Source:
     def get_drugs(self, from_file=False):
         self.logger.info("Reading drugs from {}".format(self.display_name))
         response = dict()
-        response["drugs"] = self.fetch_drugs_from_source(from_file)
+        try:
+            response["drugs"] = self.fetch_drugs_from_source(from_file)
+        except AttributeError:
+            raise NoDrugsFound('Failed getting drugs for {}'.format(self.url))
         self.logger.info("Got {} entries".format(len(response["drugs"])))
         response["source"] = self
         response["ts"] = int(time.time())
