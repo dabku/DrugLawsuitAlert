@@ -1,4 +1,5 @@
 # DrugLawsuitAlert
+[![Build Status](https://travis-ci.org/dabku/DrugLawsuitAlert.svg?branch=master)](https://travis-ci.org/dabku/DrugLawsuitAlert)
 
 DrugLawsuitAlert is a project to monitor several US-based Public Attorneys web pages that specialize in medical lawsuits.
 The purpose of this project is to notify my significant other about current ongoing lawsuits to adjust decisions on prescribing medications.
@@ -22,6 +23,24 @@ Information stored in the database:
 * Source link
 * Timestamps
 
+### Usage
+As mentioned above, I do not store any webpages, even for test purposes.
+Execute to download webpages:
+```console
+python drugAlert.py -mode UPDATE_TEST_FILES
+```
+To test the script on pre-downloaded webpages:
+```console
+python drugAlert.py -mode TEST_FILE
+```
+To test the script and see what twitter entries will look like:
+```console
+python drugAlert.py -mode TEST_LIVE
+```
+To run the script, publish tweets and save timestamps in the database
+```console
+python drugAlert.py -mode LIVE
+```
 
 [Twitter_Account]: <https://twitter.com/LawsuitsBot>
 [TwitterAPI]: <https://github.com/geduldig/TwitterAPI/>
