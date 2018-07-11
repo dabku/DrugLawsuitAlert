@@ -1,20 +1,5 @@
 import unittest
-from nose_parameterized import parameterized
-from .web_scraping_sources import get_all_scraping_sources, NoDrugsFound
-
-
-class DynamicClassBase(unittest.TestCase):
-    longMessage = True
-
-
-def make_test_function(description, a, b):
-    def test(self):
-        self.assertEqual(a, b, description)
-    return test
-
-
-names = get_all_scraping_sources().keys()
-
+from .web_scraping_sources import get_all_scraping_sources
 
 
 class TestScrapingSources(unittest.TestCase):
@@ -24,7 +9,6 @@ class TestScrapingSources(unittest.TestCase):
         srcs = get_all_scraping_sources()
         for src_class in srcs.values():
             cls.sources.append(src_class())
-
 
 
 class TestOffline(TestScrapingSources):
@@ -41,15 +25,14 @@ class TestOffline(TestScrapingSources):
                 self.assertIsNotNone(drugs)
 
 
-
 class TestOnline(TestScrapingSources):
-    #@unittest.skip("online tests disabled")
+    # @unittest.skip("online tests disabled")
     def test_fetchdata_url(self):
         for src in self.sources:
             with self.subTest(name=type(src)):
                 src.get_data(url=src.url, from_file=False)
 
-    #@unittest.skip("online tests disabled")
+    # @unittest.skip("online tests disabled")
     def test_get_drugs_url(self):
         for src in self.sources:
             with self.subTest(name=type(src)):
