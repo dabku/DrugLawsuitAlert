@@ -256,7 +256,7 @@ class YouHaveALawyer(Source):
             url = self.url
         r = self.get_data(url, from_file=from_file)
         soup = BeautifulSoup(r, 'html.parser')
-        items = soup.find_all('div', class_="fusion-toggle-heading")
+        items = soup.find('div', class_="flex-accordian").find_all('h4')
         drugs = [drug.text for drug in items]
         for drug in drugs:
             drugs_dict[drug] = self.url

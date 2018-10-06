@@ -132,7 +132,7 @@ def run(live, from_file):
         try:
             scans.append(src_class().get_drugs(from_file=from_file))
         except NoDrugsFound:
-            logger.error('No drugs found in scraping source {}'.format(src_class.url))
+            logger.error('No drugs found in scraping source {}'.format(src_class._url))
             error = 'No drugs found in scraping source {}'.format(src_class.url)
 
     pp_scans = postprocess_scans(scans)
