@@ -12,6 +12,9 @@ class TweetNotSent(Exception):
 class TwitterError(Exception):
     pass
 
+class DuplicateTweet(Exception):
+    pass
+
 
 class Twitter:
     url_length = 23
@@ -26,12 +29,22 @@ class Twitter:
         self.logger = logging.getLogger('__main__')
         self.admin_profile = config_json["admin_profile"]
 
-    def post_tweet(self,text):
+    def post_tweet(self, text):
         self.logger.info("Posting tweet: {}".format(text))
         r = self.api.request('statuses/update', {'status': text})
         if r.status_code != 200:
             self.logger.error("Posting tweet failed with code {}".format(r.status_code))
             self.logger.error("Response content {}".format(r.response.content))
+            try:
+                code_error = json.loads(r.response.content)['errors'][0]['code']
+            except KeyError:
+                self.logger.error
+                raise TweetNotSent
+            if code_error == 187:
+                self.logger.error('Status is a duplicate.')
+                raise DuplicateTweet
+            else:
+                self.logger.error('Error code {} not recognized'.format(code_error))
             raise TweetNotSent
 
     def delete_last_tweets(self, count=1):

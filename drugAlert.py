@@ -5,7 +5,7 @@ from shutil import copy2
 from database.lawsuit_database import DB_Hit
 from database.lawsuit_database import Drugs_DB
 from drug_sources.web_scraping_sources import *
-from twitter.twitter import LawsuitsTwitter
+from twitter.twitter import LawsuitsTwitter, DuplicateTweet
 
 
 def postprocess_scans(all_scans):
@@ -145,8 +145,11 @@ def run(live, from_file):
     for tweet in tweets:
         logger.info(tweet)
         if live:
-            twitter.post_tweet(tweet)
-            time.sleep(0.5)
+            try:
+                twitter.post_tweet(tweet)
+                time.sleep(0.5)
+            except DuplicateTweet:
+                logger.warning('Tweet already posted!')
     db.save_changes(session)
     logger.info("Success!")
 
