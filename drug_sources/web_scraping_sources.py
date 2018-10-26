@@ -147,7 +147,7 @@ class TheJusticeSource(Source):
         drugs = soup.find_all('h3')
 
         for item in drugs:
-            drug_name = item.text
+            drug_name = item.text.replace('Lawsuit', '').strip()
             try:
                 drug_link = item.find('a').get("href")
             except AttributeError:
@@ -283,7 +283,7 @@ class ForTheInjured(Source):
         hits = soup.find_all('div', class_="col-12 col-md-6 col-lg-4")
         for hit in hits:
             drug_name = hit.find('a')['title']
-            drug_link =  urllib.parse.urljoin("{0.scheme}://{0.netloc}/".format(urllib.parse.urlsplit(self.url)),
+            drug_link = urllib.parse.urljoin("{0.scheme}://{0.netloc}/".format(urllib.parse.urlsplit(self.url)),
                                               hit.find('a')['href'])
             drugs_dict[drug_name] = drug_link
         return drugs_dict

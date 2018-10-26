@@ -5,7 +5,7 @@ from shutil import copy2
 from database.lawsuit_database import DB_Hit
 from database.lawsuit_database import Drugs_DB
 from drug_sources.web_scraping_sources import *
-from twitter.twitter import LawsuitsTwitter, DuplicateTweet
+from twitter.twitter import LawsuitsTwitter, DuplicateTweet, TwitterLockedForSpam
 
 
 def postprocess_scans(all_scans):
@@ -150,6 +150,9 @@ def run(live, from_file):
                 time.sleep(0.5)
             except DuplicateTweet:
                 logger.warning('Tweet already posted!')
+            except TwitterLockedForSpam:
+                logger.error('Too many tweets resulted in spam')
+                error = 'Twitter locked the account'
     db.save_changes(session)
     logger.info("Success!")
 

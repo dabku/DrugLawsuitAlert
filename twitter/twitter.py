@@ -15,6 +15,9 @@ class TwitterError(Exception):
 class DuplicateTweet(Exception):
     pass
 
+class TwitterLockedForSpam(Exception):
+    pass
+
 
 class Twitter:
     url_length = 23
@@ -43,6 +46,9 @@ class Twitter:
             if code_error == 187:
                 self.logger.error('Status is a duplicate.')
                 raise DuplicateTweet
+            if code_error == 326:
+                self.logger.error('Twitter SPAM protection locked sending status updates.')
+                raise TwitterLockedForSpam
             else:
                 self.logger.error('Error code {} not recognized'.format(code_error))
             raise TweetNotSent
