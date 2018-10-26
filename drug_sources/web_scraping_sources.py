@@ -280,7 +280,7 @@ class ForTheInjured(Source):
             url = self.url
         r = self.get_data(url, from_file=from_file)
         soup = BeautifulSoup(r, 'html.parser')
-        hits = soup.find_all('div', class_="class-thumb")
+        hits = soup.find_all('div', class_="col-12 col-md-6 col-lg-4")
         for hit in hits:
             drug_name = hit.find('a')['title']
             drug_link =  urllib.parse.urljoin("{0.scheme}://{0.netloc}/".format(urllib.parse.urlsplit(self.url)),
