@@ -128,7 +128,7 @@ class TorHoermanLawSource(Source):
 
 
 class TheJusticeSource(Source):
-    _url = "https://www.thejusticelawyer.com/practice-areas/detail/dangerous-drugs-medical-devices-list"
+    _url = "http://www.thejusticelawyer.com/practice-areas/detail/dangerous-drugs-medical-devices-list"
     _test_file = "test_sites/thejustice/thejustice.html"
     _display_name = "The Eichholz Law Firm, P.C."
 

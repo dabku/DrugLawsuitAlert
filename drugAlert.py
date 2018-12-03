@@ -1,9 +1,11 @@
 import argparse
+import os
+import sys
 import logging.handlers
 from shutil import copy2
 
-from database.lawsuit_database import DB_Hit
-from database.lawsuit_database import Drugs_DB
+from database.lawsuit_database import DbHit
+from database.lawsuit_database import DrugsDb
 from drug_sources.web_scraping_sources import *
 from twitter.twitter import LawsuitsTwitter, DuplicateTweet, TwitterLockedForSpam
 
@@ -18,10 +20,11 @@ def postprocess_scans(all_scans):
                                     'hits':[('drug_name',source_object,scan_timestamp)]
                                     'sources':[(source_object,scan_timestamp)]}
     """
-    objects = dict()
-    objects['drugs'] = []
-    objects['hits'] = []
-    objects['sources'] = []
+    objects = {'drugs': [],
+               'hits': [],
+               'sources': []
+               }
+
     for scan in all_scans:
         scan_ts = scan['ts']
         src = scan['source']
@@ -64,7 +67,7 @@ def evaluate_postprocessed_scans(db, session, postprocessed_scans):
         current_srcs_for_drug = [getattr(sys.modules[__name__], item) for item in current_src_names_for_drug]
 
         process_new_hit(new_hits, drug, source, same_src_hits_for_drug, total_drug_hits, current_srcs_for_drug)
-        new_hit = DB_Hit(drugs[drug], sources[source.name], scan_ts)
+        new_hit = DbHit(drugs[drug], sources[source.name], scan_ts)
         db.add_item(new_hit, session)
 
     return new_hits
@@ -118,10 +121,10 @@ def run(live, from_file):
         except FileNotFoundError:
             logger.error('Cannot find database file drugs.db')
             raise RuntimeError
-        db = Drugs_DB(test_run_db)
+        db = DrugsDb(test_run_db)
         db.create_database()
     else:
-        db = Drugs_DB()
+        db = DrugsDb()
     twitter_auth = os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), 'twitter_auth.json')
     twitter = LawsuitsTwitter(twitter_auth)
     session = db.create_session()
