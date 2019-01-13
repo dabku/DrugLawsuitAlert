@@ -53,7 +53,7 @@ class DrugsDb(DB):
         DB.__init__(self, db_name, db_path)
 
     @staticmethod
-    def get_drug(session, db_id=None, name=None):
+    def get_item(session, db_id=None, name=None):
         try:
             if name:
                 return session.query(DbDrug).filter(DbDrug.name == name).one()
@@ -64,15 +64,12 @@ class DrugsDb(DB):
             raise e
 
     @staticmethod
+    def get_drug(session, db_id=None, name=None):
+        return DrugsDb.get_item(session, db_id, name)
+
+    @staticmethod
     def get_source(session, db_id=None, name=None):
-        try:
-            if name:
-                return session.query(DbSource).filter(DbSource.name == name).one()
-            elif db_id:
-                return session.query(DbSource).filter(DbSource.id == db_id).one()
-        except NoResultFound as e:
-            logger.debug('Source not found for id={} name={}'.format(db_id, name))
-            raise e
+        return DrugsDb.get_item(session, db_id, name)
 
     @staticmethod
     def get_distinct_drug_hits(session):
