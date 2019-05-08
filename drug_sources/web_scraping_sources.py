@@ -128,7 +128,7 @@ class TorHoermanLawSource(Source):
 
 
 class TheJusticeSource(Source):
-    _url = "https://www.thejusticelawyer.com/practice-areas/detail/dangerous-drugs-medical-devices-list"
+    _url = "http://www.thejusticelawyer.com/practice-areas/detail/dangerous-drugs-medical-devices-list"
     _test_file = "test_sites/thejustice/thejustice.html"
     _display_name = "The Eichholz Law Firm, P.C."
 
@@ -147,7 +147,7 @@ class TheJusticeSource(Source):
         drugs = soup.find_all('h3')
 
         for item in drugs:
-            drug_name = item.text
+            drug_name = item.text.replace('Lawsuit', '').strip()
             try:
                 drug_link = item.find('a').get("href")
             except AttributeError:
@@ -256,7 +256,7 @@ class YouHaveALawyer(Source):
             url = self.url
         r = self.get_data(url, from_file=from_file)
         soup = BeautifulSoup(r, 'html.parser')
-        items = soup.find_all('div', class_="fusion-toggle-heading")
+        items = soup.find('div', class_="flex-accordian").find_all('h4')
         drugs = [drug.text for drug in items]
         for drug in drugs:
             drugs_dict[drug] = self.url
@@ -280,10 +280,10 @@ class ForTheInjured(Source):
             url = self.url
         r = self.get_data(url, from_file=from_file)
         soup = BeautifulSoup(r, 'html.parser')
-        hits = soup.find_all('div', class_="class-thumb")
+        hits = soup.find_all('div', class_="col-12 col-md-6 col-lg-4")
         for hit in hits:
             drug_name = hit.find('a')['title']
-            drug_link =  urllib.parse.urljoin("{0.scheme}://{0.netloc}/".format(urllib.parse.urlsplit(self.url)),
+            drug_link = urllib.parse.urljoin("{0.scheme}://{0.netloc}/".format(urllib.parse.urlsplit(self.url)),
                                               hit.find('a')['href'])
             drugs_dict[drug_name] = drug_link
         return drugs_dict

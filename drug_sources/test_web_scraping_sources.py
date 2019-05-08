@@ -39,8 +39,8 @@ class TestOnline(TestScrapingSources):
                 drugs = src.get_drugs(from_file=False)
                 self.assertIsNotNone(drugs)
 
-if __name__ == '__main__':
 
+if __name__ == '__main__':
     test_suite = unittest.TestSuite()
     test_suite.addTest(unittest.makeSuite(TestOnline))
     test_suite.addTest(unittest.makeSuite(TestOffline))

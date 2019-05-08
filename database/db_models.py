@@ -1,28 +1,26 @@
-from sqlalchemy import *
-from sqlalchemy import create_engine, ForeignKey
-from sqlalchemy import Column, Date, Integer, String
+from sqlalchemy import ForeignKey, Column, Integer, String
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship, backref
 
 Base = declarative_base()
 
 
-class DB_Drug(Base):
-    __tablename__="drugs"
+class DbDrug(Base):
+    __tablename__ = "drugs"
     id = Column(Integer, primary_key=True)
     name = Column(String)
-    descriptions = relationship("DB_Description")
+    descriptions = relationship("DbDescription")
 
     def __init__(self, name):
         self.name = name
 
 
-class DB_Hit(Base):
+class DbHit(Base):
     __tablename__ = "hits"
     id = Column(Integer, primary_key=True)
     drug_id = Column(Integer, ForeignKey('drugs.id'))
-    drug = relationship("DB_Drug", backref=backref("hits"))
-    source = relationship("DB_Source", backref=backref("hits"))
+    drug = relationship("DbDrug", backref=backref("hits"))
+    source = relationship("DbSource", backref=backref("hits"))
     source_id = Column(Integer, ForeignKey('sources.id'))
     hit_ts = Column(Integer)
 
@@ -32,7 +30,7 @@ class DB_Hit(Base):
         self.hit_ts = hit_ts
 
 
-class DB_Description(Base):
+class DbDescription(Base):
     __tablename__ = "descr"
     id = Column(Integer, primary_key=True)
     drug_id = Column(Integer, ForeignKey('drugs.id'))
@@ -43,7 +41,7 @@ class DB_Description(Base):
         self.text = text
 
 
-class DB_Source(Base):
+class DbSource(Base):
     __tablename__ = "sources"
     id = Column(Integer, primary_key=True)
     created_ts = Column(Integer)
@@ -53,12 +51,10 @@ class DB_Source(Base):
     twitter_name = Column(String)
     address = Column(String)
 
-    def __init__(self, name, address, display_name, twitter_name ,created_ts, updated_ts):
+    def __init__(self, name, address, display_name, twitter_name, created_ts, updated_ts):
         self.name = name
         self.address = address
         self.display_name = display_name
         self.twitter_name = twitter_name
         self.created_ts = created_ts
         self.updated_ts = updated_ts
-
-
